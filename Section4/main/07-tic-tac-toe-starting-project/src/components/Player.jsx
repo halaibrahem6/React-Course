@@ -8,8 +8,7 @@ export default function Player({initialName , symbol, isActive, onChangeName }) 
 
 
 function handleEditClick(){
-    setIsEditing((editing)=>!editing);//this way better if we want to update the state dependence on perviouse state bc(editing here is the same of isEditing)//setIsEditing(! isEditing);
-    
+    setIsEditing((editing)=>!editing);
     if(isEditing){ 
       onChangeName(symbol,playerName);
 }
