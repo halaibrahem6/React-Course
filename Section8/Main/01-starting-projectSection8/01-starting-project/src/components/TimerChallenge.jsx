@@ -4,20 +4,29 @@ import ResultModal from "./ResultModal.jsx";
 export default function TimerChallenge({title, targetTime}){
     const timer =useRef();
     const dialog=useRef();
-        const [timeStarted,setTimeStarted]=useState(false);
-    const [timerExpired,setTimerExpiered]=useState(false);
+       
+    //const [timeStarted,setTimeStarted]=useState(false);
+   //const [timerExpired,setTimerExpiered]=useState(false);
+ 
+   const [timeRemaining,setTimeRemaining] = useState(targetTime * 1000);
 
+   const timerIsActive= timeRemaining > 0  && timeRemaining < targetTime*1000;
 
+   if (timeRemaining <= 0){
+    clearInterval(timer.current);
+    setTimeRemaining(targetTime * 1000);
+    dialog.current.open();
+   }
 
     function handleStart(){
-       timer.current= setTimeout(() => {setTimerExpiered(true);
-         dialog.current.showModal(); },targetTime * 1000);
+       timer.current= setInterval(() => {setTimeRemaining(prevTimeRemaining=> prevTimeRemaining -10) },10);
         setTimeStarted(true);
 
     }
 
     function handleStop(){
-        clearTimeout(timer.current);
+        dialog.current.open();
+        clearInterval(timer.current);   
     }
 
     return (
@@ -29,13 +38,13 @@ export default function TimerChallenge({title, targetTime}){
             
            <p className="challenge-time"> {targetTime} second{targetTime > 1 ? 's' :''} </p>
            <p>
-            <button onClick={timeStarted ? handleStop : handleStart}>
-                {timeStarted ? "Stop" : "Start"} Challenge
+            <button onClick={timerIsActive ? handleStop : handleStart}>
+                {timerIsActive? "Stop" : "Start"} Challenge
             </button>
             </p>
             
-            <p className={timeStarted ? 'active' : undefined}>
-                {timeStarted ?  'Time is Running...' : 'Timer Inactive' }
+            <p className={timerIsActive ? 'active' : undefined}>
+                {timerIsActive ?  'Time is Running...' : 'Timer Inactive' }
                  </p>
         </section>
    </> )
